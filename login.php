@@ -22,10 +22,15 @@ if (isset($_POST['submit'])) {
             $userName = $row['user_fullname'];
             $level = $row['level'];
 
-            if ($userVal == $emailCheck && $passVal == $passCheck) {
-                header("Location: home.php?user_fullname=$userVal");
-                exit; // tambahkan ini untuk menghentikan eksekusi kode setelah melakukan redirect
-            } else {
+            if ($userVal == $emailCheck && $passVal == $passCheck && $level == '1') {
+                header("Location: home.php?user_fullname=". urlencode($userName));
+                exit; // login admin
+            } 
+            if($userVal == $emailCheck && $passVal == $passCheck && $level == '2'){
+                header("Location: home_user.php?user_fullname=". urlencode($userName));
+                exit; //login user
+            }    
+        else {
                 $error = 'User atau password salah!!';
             }
         } else {
@@ -65,7 +70,7 @@ if (isset($_POST['submit'])) {
                                 <label for="txt_pass">Password:</label>
                                 <input type="password" class="form-control" id="txt_pass" name="txt_pass">
                             </div>
-                            <button type="submit" class="btn btn-primary" name="submit">Log In</button>
+                            <button type="submit" class="btn btn-primary" name="submit">Sign In</button>
                         </form>
                     </div>
                     <div class="card-footer">
@@ -74,7 +79,6 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </body>
 

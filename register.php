@@ -5,16 +5,19 @@ if (isset($_POST['register'])) {
     $userPass = $_POST['txt_pass'];
     $userName = $_POST['txt_nama'];
 
-    $query = "INSERT INTO user_detail (user_email, user_password, user_fullname, level) VALUES ('$userMail', '$userPass', '$userName', 2)";
-    $result = mysqli_query($koneksi, $query);
+    $query = "INSERT INTO user_detail (user_email, user_password, user_fullname, level) VALUES (?, ?, ?, 2)";
+    $stmt = mysqli_prepare($koneksi, $query);
+    mysqli_stmt_bind_param($stmt, "sss", $userMail, $userPass, $userName);
     
-    if ($result) {
+    if (mysqli_stmt_execute($stmt)) {
         header('Location: login.php');
-        exit; // Hentikan eksekusi setelah melakukan redirect
+        exit;
     } else {
-        $error = 'Gagal melakukan registrasi.';
+        $error = 'Gagal melakukan registrasi: ' . mysqli_error($koneksi);
     }
 }
+?>
+
 ?>
 
 <!DOCTYPE html>
