@@ -1,8 +1,16 @@
 <?php
 require('koneksi.php');
-$email = $_GET['user_fullname'] ?? false;
 
-// if (!$email) header("Location: login.php");
+session_start();
+
+$email = $_SESSION['user_fullname'] ?? false;
+
+if (!$email) {
+    $email = $_COOKIE['user_fullname'] ?? false;
+    $level = $_COOKIE['user_level'] ?? false;
+}
+
+if (!$email) header("Location: login.php");
 
 ?>
 <!DOCTYPE html>
@@ -12,7 +20,6 @@ $email = $_GET['user_fullname'] ?? false;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <!-- Tambahkan link ke file CSS Bootstrap di sini -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
@@ -29,12 +36,13 @@ $email = $_GET['user_fullname'] ?? false;
                     <!-- Tambahkan konten navbar di sini -->
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="login.php">Logout</a>
+                            <a class="nav-link" href="logout.php">Logout</a> <!-- Mengarahkan ke logout.php -->
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="register.php">Register</a>
                         </li>
                     </ul>
+
                 </nav>
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Selamat Datang <?php echo $email; ?></h1>
@@ -44,7 +52,7 @@ $email = $_GET['user_fullname'] ?? false;
                                 <th>No</th>
                                 <th>Email</th>
                                 <th>Nama</th>
-                                <th>Action</th> <!-- Kolom untuk tombol Edit dan Hapus -->
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>

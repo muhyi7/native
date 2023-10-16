@@ -23,16 +23,29 @@ if (isset($_POST['submit'])) {
             $level = $row['level'];
 
             if ($userVal == $emailCheck && $passVal == $passCheck && $level == '1') {
-                header("Location: home.php?user_fullname=". urlencode($userName));
+                $_SESSION['user_fullname'] = $userName;
+                $_SESSION['user_level'] = $level;
+
+                // Set cookie dengan masa berlaku 1 jam jika "ingat saya" dicentang
+                if (isset($_POST['remember_me']) && $_POST['remember_me'] == '1') {
+                    setcookie("user_fullname", $userName, time() + 3600, "/");
+                    setcookie("user_level", $level, time() + 3600, "/");
+                }
+                header("Location: home.php");
                 exit; // login admin
             } 
-            if($userVal == $emailCheck && $passVal == $passCheck && $level == '2'){
-                header("Location: home_user.php?user_fullname=". urlencode($userName));
-                exit; //login user
+            if ($userVal == $emailCheck && $passVal == $passCheck && $level == '2') {
+                $_SESSION['user_fullname'] = $userName;
+                $_SESSION['user_level'] = $level;
+
+                // Set cookie dengan masa berlaku 1 jam jika "ingat saya" dicentang
+                if (isset($_POST['remember_me']) && $_POST['remember_me'] == '1') {
+                    setcookie("user_fullname", $userName, time() + 3600, "/");
+                    setcookie("user_level", $level, time() + 3600, "/");
+                }
+                header("Location: home_user.php");
+                exit; // login user
             }    
-        else {
-                $error = 'User atau password salah!!';
-            }
         } else {
             $error = 'User tidak ditemukan!!';
         }
@@ -69,6 +82,10 @@ if (isset($_POST['submit'])) {
                             <div class="form-group">
                                 <label for="txt_pass">Password:</label>
                                 <input type="password" class="form-control" id="txt_pass" name="txt_pass">
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="remember_me" name="remember_me" value="1">
+                                <label class="form-check-label" for="remember_me">Ingat Saya</label>
                             </div>
                             <button type="submit" class="btn btn-primary" name="submit">Log In</button>
                         </form>
